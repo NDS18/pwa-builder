@@ -73,7 +73,7 @@ const api = {
 // =================================================================
 // НОВЫЙ КОМПОНЕНТ: Ловушка для ошибок (Error Boundary)
 // =================================================================
-class ErrorBoundary extends React.Component {
+export class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
     this.state = { hasError: false, error: null, errorInfo: null };
@@ -590,18 +590,9 @@ function AuthenticatedApp() {
 
 
 // --- Главный компонент-маршрутизатор ---
-function App() {
+export default function App() {
     const { user, isLoading } = useAuth();
 
-    if (isLoading) {
-        return <div className="bg-gray-900 min-h-screen flex items-center justify-center text-white">Загрузка...</div>;
-    }
-
-    return user ? <AuthenticatedApp /> : <AuthPage />;
-}
-
-// --- Компонент-обертка, который является точкой входа ---
-export default function AppWrapper() {
     if (firebaseInitializationError) {
         return (
             <div style={{ color: 'white', backgroundColor: '#111827', padding: '40px', minHeight: '100vh', fontFamily: 'monospace' }}>
@@ -614,9 +605,9 @@ export default function AppWrapper() {
         );
     }
 
-    return (
-      <ErrorBoundary>
-        <App />
-      </ErrorBoundary>
-    );
+    if (isLoading) {
+        return <div className="bg-gray-900 min-h-screen flex items-center justify-center text-white">Загрузка...</div>;
+    }
+
+    return user ? <AuthenticatedApp /> : <AuthPage />;
 }

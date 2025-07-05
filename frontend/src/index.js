@@ -1,11 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import AppWrapper from './App'; // ИСПРАВЛЕНИЕ: Импортируем AppWrapper, а не App
+import App, { ErrorBoundary } from './App'; // ИСПРАВЛЕНИЕ: Импортируем App и ErrorBoundary
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <AppWrapper />
+    <ErrorBoundary>
+      <App />
+    </ErrorBoundary>
   </React.StrictMode>
 );
