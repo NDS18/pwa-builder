@@ -14,13 +14,12 @@ import {
 // =================================================================
 // ВАЖНО: Вставьте сюда ваши реальные ключи из настроек проекта Firebase.
 const firebaseConfig = {
-  apiKey: "AIzaSyBfRoy1n1_X34PKxu0usj2LHtDLqOYc8n0",
-  authDomain: "nds18-b2ece.firebaseapp.com",
-  projectId: "nds18-b2ece",
-  storageBucket: "nds18-b2ece.firebasestorage.app",
-  messagingSenderId: "974414485098",
-  appId: "1:974414485098:web:3562e4e61ec7c859d7dc13",
-  measurementId: "G-PXMDM1PSY0"
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_STORAGE_BUCKET",
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+  appId: "YOUR_APP_ID"
 };
 
 // --- Инициализация Firebase с проверкой на ошибки ---
@@ -69,43 +68,6 @@ const api = {
     createApp: (data) => authenticatedFetch('/api/apps', { method: 'POST', body: JSON.stringify(data) }),
     updateApp: (appId, data) => authenticatedFetch(`/api/apps/${appId}`, { method: 'PUT', body: JSON.stringify(data) }),
 };
-
-// =================================================================
-// НОВЫЙ КОМПОНЕНТ: Ловушка для ошибок (Error Boundary)
-// =================================================================
-export class ErrorBoundary extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { hasError: false, error: null, errorInfo: null };
-  }
-
-  static getDerivedStateFromError(error) {
-    return { hasError: true, error: error };
-  }
-
-  componentDidCatch(error, errorInfo) {
-    console.error("Uncaught error:", error, errorInfo);
-    this.setState({ errorInfo: errorInfo });
-  }
-
-  render() {
-    if (this.state.hasError) {
-      return (
-        <div style={{ color: 'white', backgroundColor: '#111827', padding: '40px', minHeight: '100vh', fontFamily: 'monospace' }}>
-          <h1>Что-то пошло не так.</h1>
-          <p>Пожалуйста, скопируйте и отправьте эту ошибку для диагностики:</p>
-          <pre style={{ color: '#ff8a8a', background: '#2d2d2d', padding: '20px', borderRadius: '8px', whiteSpace: 'pre-wrap' }}>
-            {this.state.error && this.state.error.toString()}
-            <br />
-            {this.state.errorInfo && this.state.errorInfo.componentStack}
-          </pre>
-        </div>
-      );
-    }
-
-    return this.props.children;
-  }
-}
 
 
 // =================================================================
