@@ -12,8 +12,9 @@ import {
 // =================================================================
 // Файл: config/firebase.js (Клиентская конфигурация Firebase)
 // =================================================================
+// ВАЖНО: Вставьте сюда ваши реальные ключи из настроек проекта Firebase.
 const firebaseConfig = {
-    apiKey: "AIzaSyBfRoy1n1_X34PKxu0usj2LHtDLqOYc8n0",
+  apiKey: "AIzaSyBfRoy1n1_X34PKxu0usj2LHtDLqOYc8n0",
   authDomain: "nds18-b2ece.firebaseapp.com",
   projectId: "nds18-b2ece",
   storageBucket: "nds18-b2ece.firebasestorage.app",
@@ -29,7 +30,10 @@ const auth = getAuth(app);
 // =================================================================
 // Файл: services/api.js (Хелпер для API запросов)
 // =================================================================
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001';
+// ИСПРАВЛЕНИЕ: Мы жестко прописываем URL бэкенда, чтобы избежать ошибки "process is not defined".
+// ВАЖНО: Замените этот URL на реальный URL вашего развернутого бэкенда!
+// Вы можете найти его в настройках вашего бэкенд-проекта на Vercel.
+const API_BASE_URL = 'https://pwa-builder-two.vercel.app';
 
 const getAuthToken = async () => {
     const user = auth.currentUser;
@@ -62,6 +66,43 @@ const api = {
     createApp: (data) => authenticatedFetch('/api/apps', { method: 'POST', body: JSON.stringify(data) }),
     updateApp: (appId, data) => authenticatedFetch(`/api/apps/${appId}`, { method: 'PUT', body: JSON.stringify(data) }),
 };
+
+// =================================================================
+// НОВЫЙ КОМПОНЕНТ: Ловушка для ошибок (Error Boundary)
+// =================================================================
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error) {
+    // Обновляем состояние, чтобы следующий рендер показал запасной UI.
+    return { hasError: true, error: error };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    // Вы можете также логгировать ошибку в сервис отчетов об ошибках
+    console.error("Uncaught error:", error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      // Вы можете рендерить любой кастомный запасной UI
+      return (
+        <div style={{ color: 'white', backgroundColor: '#111827', padding: '40px', minHeight: '100vh', fontFamily: 'monospace' }}>
+          <h1>Что-то пошло не так.</h1>
+          <p>Пожалуйста, скопируйте и отправьте эту ошибку для диагностики:</p>
+          <pre style={{ color: '#ff8a8a', background: '#2d2d2d', padding: '20px', borderRadius: '8px', whiteSpace: 'pre-wrap' }}>
+            {this.state.error && this.state.error.toString()}
+          </pre>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
 
 
 // =================================================================
@@ -484,7 +525,6 @@ const AuthPage = () => {
     );
 };
 
-// --- ИСПРАВЛЕНИЕ: Логика аутентификации вынесена в кастомный хук ---
 function useAuth() {
     const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -494,16 +534,13 @@ function useAuth() {
             setUser(user);
             setIsLoading(false);
         });
-        // Очистка при размонтировании компонента
         return unsubscribe;
     }, []);
 
     return { user, isLoading };
 }
 
-
-export default function App() {
-    // Используем наш новый кастомный хук
+function App() {
     const { user, isLoading } = useAuth();
     const [currentPage, setCurrentPage] = useState('dashboard');
     const [selectedApp, setSelectedApp] = useState(null);
@@ -549,4 +586,13 @@ export default function App() {
     }
 
     return <DashboardPage onSelectApp={handleSelectApp} onCreateNew={handleCreateNew} onLogout={handleLogout} />;
+}
+
+// Оборачиваем App в ErrorBoundary
+export default function AppWrapper() {
+    return (
+        <ErrorBoundary>
+            <App />
+        </ErrorBoundary>
+    );
 }
