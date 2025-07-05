@@ -13,7 +13,7 @@ import {
 // Файл: config/firebase.js (Клиентская конфигурация Firebase)
 // =================================================================
 const firebaseConfig = {
-  apiKey: "AIzaSyBfRoy1n1_X34PKxu0usj2LHtDLqOYc8n0",
+    apiKey: "AIzaSyBfRoy1n1_X34PKxu0usj2LHtDLqOYc8n0",
   authDomain: "nds18-b2ece.firebaseapp.com",
   projectId: "nds18-b2ece",
   storageBucket: "nds18-b2ece.firebasestorage.app",
@@ -29,7 +29,7 @@ const auth = getAuth(app);
 // =================================================================
 // Файл: services/api.js (Хелпер для API запросов)
 // =================================================================
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001';
 
 const getAuthToken = async () => {
     const user = auth.currentUser;
@@ -484,19 +484,29 @@ const AuthPage = () => {
     );
 };
 
-export default function App() {
+// --- ИСПРАВЛЕНИЕ: Логика аутентификации вынесена в кастомный хук ---
+function useAuth() {
     const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
-    const [currentPage, setCurrentPage] = useState('dashboard');
-    const [selectedApp, setSelectedApp] = useState(null);
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             setUser(user);
             setIsLoading(false);
         });
-        return () => unsubscribe();
+        // Очистка при размонтировании компонента
+        return unsubscribe;
     }, []);
+
+    return { user, isLoading };
+}
+
+
+export default function App() {
+    // Используем наш новый кастомный хук
+    const { user, isLoading } = useAuth();
+    const [currentPage, setCurrentPage] = useState('dashboard');
+    const [selectedApp, setSelectedApp] = useState(null);
 
     const handleSelectApp = (app) => {
         setSelectedApp(app);
