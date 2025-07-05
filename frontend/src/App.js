@@ -70,43 +70,6 @@ const api = {
     updateApp: (appId, data) => authenticatedFetch(`/api/apps/${appId}`, { method: 'PUT', body: JSON.stringify(data) }),
 };
 
-// =================================================================
-// КОМПОНЕНТ: Ловушка для ошибок (Error Boundary)
-// =================================================================
-export class ErrorBoundary extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { hasError: false, error: null, errorInfo: null };
-  }
-
-  static getDerivedStateFromError(error) {
-    return { hasError: true, error: error };
-  }
-
-  componentDidCatch(error, errorInfo) {
-    console.error("Uncaught error:", error, errorInfo);
-    this.setState({ errorInfo: errorInfo });
-  }
-
-  render() {
-    if (this.state.hasError) {
-      return (
-        <div style={{ color: 'white', backgroundColor: '#111827', padding: '40px', minHeight: '100vh', fontFamily: 'monospace' }}>
-          <h1>Что-то пошло не так.</h1>
-          <p>Пожалуйста, скопируйте и отправьте эту ошибку для диагностики:</p>
-          <pre style={{ color: '#ff8a8a', background: '#2d2d2d', padding: '20px', borderRadius: '8px', whiteSpace: 'pre-wrap' }}>
-            {this.state.error && this.state.error.toString()}
-            <br />
-            {this.state.errorInfo && this.state.errorInfo.componentStack}
-          </pre>
-        </div>
-      );
-    }
-
-    return this.props.children;
-  }
-}
-
 
 // =================================================================
 // Компоненты UI (модальное окно и шаги редактора)
