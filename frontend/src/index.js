@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App'; // ИСПРАВЛЕНИЕ: Импортируем App напрямую
+import AppWrapper from './App'; // ИСПРАВЛЕНИЕ: Импортируем AppWrapper, а не App
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <AppWrapper />
   </React.StrictMode>
 );
