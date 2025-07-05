@@ -28,7 +28,7 @@ const auth = getAuth(app);
 // =================================================================
 // Файл: services/api.js (Хелпер для API запросов)
 // =================================================================
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const getAuthToken = async () => {
     const user = auth.currentUser;
