@@ -3,19 +3,21 @@ const express = require('express');
 const cors = require('cors');
 const admin = require('firebase-admin');
 
-// --- Блок инициализации с самодиагностикой ---
-try {
-  if (!process.env.SERVICE_ACCOUNT) {
-    throw new Error('Переменная окружения SERVICE_ACCOUNT не найдена.');
+// --- Блок инициализации с самодиагностикой и проверкой ---
+// Эта проверка предотвращает повторную инициализацию на Vercel
+if (!admin.apps.length) {
+  try {
+    if (!process.env.SERVICE_ACCOUNT) {
+      throw new Error('Переменная окружения SERVICE_ACCOUNT не найдена.');
+    }
+    const serviceAccount = JSON.parse(process.env.SERVICE_ACCOUNT);
+    admin.initializeApp({
+      credential: admin.credential.cert(serviceAccount)
+    });
+    console.log("Firebase Admin SDK успешно инициализирован.");
+  } catch (error) {
+    console.error("КРИТИЧЕСКАЯ ОШИБКА ИНИЦИАЛИЗАЦИИ FIREBASE:", error.message);
   }
-  const serviceAccount = JSON.parse(process.env.SERVICE_ACCOUNT);
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
-  });
-  console.log("Firebase Admin SDK успешно инициализирован.");
-} catch (error) {
-  console.error("КРИТИЧЕСКАЯ ОШИБКА ИНИЦИАЛИЗАЦИИ FIREBASE:", error.message);
-  process.exit(1);
 }
 // --- Конец блока инициализации ---
 
