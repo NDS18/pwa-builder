@@ -15,13 +15,12 @@ import {
 
 // ВАЖНО: Вставьте сюда ваши реальные ключи из настроек проекта Firebase.
 const firebaseConfig = {
-  apiKey: "AIzaSyBfRoy1n1_X34PKxu0usj2LHtDLqOYc8n0",
-  authDomain: "nds18-b2ece.firebaseapp.com",
-  projectId: "nds18-b2ece",
-  storageBucket: "nds18-b2ece.firebasestorage.app",
-  messagingSenderId: "974414485098",
-  appId: "1:974414485098:web:3562e4e61ec7c859d7dc13",
-  measurementId: "G-PXMDM1PSY0"
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_STORAGE_BUCKET",
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+  appId: "YOUR_APP_ID"
 };
 
 let auth;
@@ -66,7 +65,7 @@ const api = {
 
 const AuthContext = createContext(null);
 
-export function AuthProvider({ children }) {
+export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -79,13 +78,14 @@ export function AuthProvider({ children }) {
             setUser(currentUser);
             setIsLoading(false);
         });
-        return unsubscribe;
+        return unsubscribe; // Очистка подписки при размонтировании
     }, []);
 
     const value = { user, isLoading };
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
+// Кастомный хук для доступа к контексту
 const useAuth = () => {
     const context = useContext(AuthContext);
     if (context === undefined) {
