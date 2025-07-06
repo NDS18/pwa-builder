@@ -15,12 +15,13 @@ import {
 
 // ВАЖНО: Вставьте сюда ваши реальные ключи из настроек проекта Firebase.
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyBfRoy1n1_X34PKxu0usj2LHtDLqOYc8n0",
+  authDomain: "nds18-b2ece.firebaseapp.com",
+  projectId: "nds18-b2ece",
+  storageBucket: "nds18-b2ece.firebasestorage.app",
+  messagingSenderId: "974414485098",
+  appId: "1:974414485098:web:3562e4e61ec7c859d7dc13",
+  measurementId: "G-PXMDM1PSY0"
 };
 
 let auth;
@@ -65,7 +66,7 @@ const api = {
 
 const AuthContext = createContext(null);
 
-export const AuthProvider = ({ children }) => {
+export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
 
