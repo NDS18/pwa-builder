@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App, { AuthProvider } from './App'; // ИСПРАВЛЕНИЕ: Правильный импорт App и AuthProvider
+import App, { AuthProvider } from './App';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
